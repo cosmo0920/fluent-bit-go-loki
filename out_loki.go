@@ -58,7 +58,7 @@ func (p *fluentPlugin) HandleLine(ls model.LabelSet, timestamp time.Time, line s
 
 //export FLBPluginRegister
 func FLBPluginRegister(ctx unsafe.Pointer) int {
-	return output.FLBPluginRegister(ctx, "loki", "Loki GO!")
+	return output.FLBPluginRegister(ctx, "loki", "Loki Output plugin written in GO!")
 }
 
 //export FLBPluginInit
