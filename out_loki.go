@@ -120,13 +120,13 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 		// Get timestamp
 		timestamp := ts.(output.FLBTime).Time
 
-		js, err := createJSON(timestamp, record)
+		line, err := createJSON(timestamp, record)
 		if err != nil {
 			fmt.Errorf("error creating message for Grafana Loki: %v", err)
 			continue
 		}
 
-		err = plugin.HandleLine(ls, timestamp, string(js))
+		err = plugin.HandleLine(ls, timestamp, line)
 		if err != nil {
 			fmt.Errorf("error sending message for Grafana Loki: %v", err)
 			return output.FLB_RETRY
