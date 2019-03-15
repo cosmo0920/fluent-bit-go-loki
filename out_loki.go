@@ -12,12 +12,49 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"time"
 	"unsafe"
 )
 
 var loki *client.Client
 var ls model.LabelSet
+var plugin GoOutputPlugin = &fluentPlugin{}
+
+type GoOutputPlugin interface {
+	PluginConfigKey(ctx unsafe.Pointer, key string) string
+	Unregister(ctx unsafe.Pointer)
+	GetRecord(dec *output.FLBDecoder) (ret int, ts interface{}, rec map[interface{}]interface{})
+	NewDecoder(data unsafe.Pointer, length int) *output.FLBDecoder
+	HandleLine(ls model.LabelSet, timestamp time.Time, line string) error
+	Exit(code int)
+}
+
+type fluentPlugin struct{}
+
+func (p *fluentPlugin) PluginConfigKey(ctx unsafe.Pointer, key string) string {
+	return output.FLBPluginConfigKey(ctx, key)
+}
+
+func (p *fluentPlugin) Unregister(ctx unsafe.Pointer) {
+	output.FLBPluginUnregister(ctx)
+}
+
+func (p *fluentPlugin) GetRecord(dec *output.FLBDecoder) (int, interface{}, map[interface{}]interface{}) {
+	return output.GetRecord(dec)
+}
+
+func (p *fluentPlugin) NewDecoder(data unsafe.Pointer, length int) *output.FLBDecoder {
+	return output.NewDecoder(data, int(length))
+}
+
+func (p *fluentPlugin) Exit(code int) {
+	os.Exit(code)
+}
+
+func (p *fluentPlugin) HandleLine(ls model.LabelSet, timestamp time.Time, line string) error {
+	return loki.Handle(ls, timestamp, line)
+}
 
 //export FLBPluginRegister
 func FLBPluginRegister(ctx unsafe.Pointer) int {
@@ -29,11 +66,14 @@ func FLBPluginRegister(ctx unsafe.Pointer) int {
 // ctx (context) pointer to fluentbit context (state/ c code)
 func FLBPluginInit(ctx unsafe.Pointer) int {
 	// Example to retrieve an optional configuration parameter
-	url := output.FLBPluginConfigKey(ctx, "url")
+	url := plugin.PluginConfigKey(ctx, "url")
 	var clientURL flagext.URLValue
 	err := clientURL.Set(url)
 	if err != nil {
 		log.Fatalf("Failed to parse client URL")
+		plugin.Unregister(ctx)
+		plugin.Exit(1)
+		return output.FLB_ERROR
 	}
 	fmt.Printf("[flb-go] plugin URL parameter = '%s'\n", url)
 
@@ -51,6 +91,9 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	loki, err = client.New(cfg, kit.NewLogrusLogger(log))
 	if err != nil {
 		log.Fatalf("client.New: %s\n", err)
+		plugin.Unregister(ctx)
+		plugin.Exit(1)
+		return output.FLB_ERROR
 	}
 	ls = model.LabelSet{"job": "fluent-bit"}
 
@@ -63,10 +106,10 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 	var ts interface{}
 	var record map[interface{}]interface{}
 
-	dec := output.NewDecoder(data, int(length))
+	dec := plugin.NewDecoder(data, int(length))
 
 	for {
-		ret, ts, record = output.GetRecord(dec)
+		ret, ts, record = plugin.GetRecord(dec)
 		if ret != 0 {
 			break
 		}
@@ -80,7 +123,7 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 			continue
 		}
 
-		err = loki.Handle(ls, timestamp, string(js))
+		err = plugin.HandleLine(ls, timestamp, string(js))
 		if err != nil {
 			fmt.Errorf("error sending message for Grafana Loki: %v", err)
 			return output.FLB_RETRY
