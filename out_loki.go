@@ -67,6 +67,9 @@ func FLBPluginRegister(ctx unsafe.Pointer) int {
 func FLBPluginInit(ctx unsafe.Pointer) int {
 	// Example to retrieve an optional configuration parameter
 	url := plugin.PluginConfigKey(ctx, "url")
+	if url == "" {
+		url = "http://localhost:3100/api/prom/push"
+	}
 	var clientURL flagext.URLValue
 	err := clientURL.Set(url)
 	if err != nil {
