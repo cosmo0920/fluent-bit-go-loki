@@ -58,7 +58,7 @@ func (p *testFluentPlugin) PluginConfigKey(ctx unsafe.Pointer, key string) strin
 		return p.batchWait
 	case "BatchSize":
 		return p.batchSize
-	case "LabelSets":
+	case "Labels":
 		return  `
 {"labels": [{"key": "job", "label": "fluent-bit"}]}
 `
