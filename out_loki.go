@@ -68,16 +68,18 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	url := plugin.PluginConfigKey(ctx, "URL")
 	batchWait := plugin.PluginConfigKey(ctx, "BatchWait")
 	batchSize := plugin.PluginConfigKey(ctx, "BatchSize")
+	labels := plugin.PluginConfigKey(ctx, "Labels")
 
-	config, err := getLokiConfig(url, batchWait, batchSize)
+	config, err := getLokiConfig(url, batchWait, batchSize, labels)
 	if err != nil {
 		plugin.Unregister(ctx)
 		plugin.Exit(1)
 		return output.FLB_ERROR
 	}
 	fmt.Printf("[flb-go] plugin URL parameter = '%s'\n", url)
-	fmt.Printf("[flb-go] plugin batchWait parameter = '%s'\n", batchSize)
-	fmt.Printf("[flb-go] plugin batchSize parameter = '%s'\n", batchWait)
+	fmt.Printf("[flb-go] plugin BatchWait parameter = '%s'\n", batchSize)
+	fmt.Printf("[flb-go] plugin BatchSize parameter = '%s'\n", batchWait)
+	fmt.Printf("[flb-go] plugin Labels parameter = '%s'\n", labels)
 
 	cfg := client.Config{}
 	// Init everything with default values.
@@ -97,7 +99,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 		plugin.Exit(1)
 		return output.FLB_ERROR
 	}
-	ls = model.LabelSet{"job": "fluent-bit"}
+	ls = config.labelSet
 
 	return output.FLB_OK
 }
