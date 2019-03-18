@@ -27,6 +27,10 @@
 
 [[constraint]]
   branch = "master"
+  name = "github.com/cortexproject/cortex"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/fluent/fluent-bit-go"
 
 [[constraint]]
@@ -34,7 +38,7 @@
   version = "0.8.0"
 
 [[constraint]]
-  branch = "update-cortex"
+  branch = "master"
   name = "github.com/grafana/loki"
 
 [[constraint]]
@@ -44,6 +48,10 @@
 [[constraint]]
   name = "github.com/sirupsen/logrus"
   version = "1.4.0"
+
+[[constraint]]
+  name = "github.com/stretchr/testify"
+  version = "1.3.0"
 
 [prune]
   go-tests = true

@@ -44,8 +44,15 @@
     "pkg/util/wire",
   ]
   pruneopts = "UT"
-  revision = "1f84d68382891bebc027ec6e1d60249abb535ab4"
-  source = "https://github.com/cortexproject/cortex.git"
+  revision = "515c3d1b9cc29a24889ff3d01e4f7e2331650bed"
+
+[[projects]]
+  digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  pruneopts = "UT"
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
 
 [[projects]]
   branch = "master"
@@ -137,8 +144,8 @@
   version = "v1.7.0"
 
 [[projects]]
-  branch = "update-cortex"
-  digest = "1:3081da1b84f6ac89b201a7a801b3d44ffd8cb8c2b3d148573a5bf84a69d2a7f2"
+  branch = "master"
+  digest = "1:e1e9beee482281e4ac8c9641ee4a59a8e23713ed3755e62bdd33d3b308caba11"
   name = "github.com/grafana/loki"
   packages = [
     "pkg/helpers",
@@ -146,7 +153,7 @@
     "pkg/promtail/client",
   ]
   pruneopts = "UT"
-  revision = "57c8e65dc1f3692e587aa9c9fccff25f801da00c"
+  revision = "b8d81ababaa8fe400e16e74846d6a1a1b73ed2d3"
 
 [[projects]]
   digest = "1:1168584a5881d371e96cb0e66ef6db71d7cef0856cc7f311490bc856627f8328"
@@ -190,11 +197,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:79c4e50acb2d5c0938b10b6536306693fd72a42f79f2e868df12d059671b419d"
+  digest = "1:c58bca71e857da7662bb1dbc23a06bdfa56a063297989ff3a12d6ccae0f15690"
   name = "github.com/opentracing-contrib/go-stdlib"
   packages = ["nethttp"]
   pruneopts = "UT"
-  revision = "464eb271c715662757b5c583d6b020270873f529"
+  revision = "431a6bc76b4852198549116d114392e4b9098836"
 
 [[projects]]
   digest = "1:450b7623b185031f3a456801155c8320209f75d0d4c4e633c6b1e59d44d6e392"
@@ -215,6 +222,14 @@
   pruneopts = "UT"
   revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
   version = "v0.8.1"
+
+[[projects]]
+  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  pruneopts = "UT"
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:75d51eeab0df85a3cea9e1297ccd3183b20a10cb4b48c753d8ec8d113cc14250"
@@ -249,7 +264,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:01cd0cd47758f04c5604daa3be4637e2afa1e0c15af7e08289e95360369e4f48"
+  digest = "1:0573a48c92e778ad732779bf1e5064a5085ab3fbd236ad71e53cab5753ef3e6e"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
@@ -259,7 +274,7 @@
     "xfs",
   ]
   pruneopts = "UT"
-  revision = "d0f344d83b0c80a1bc03b547a2374a9ec6711144"
+  revision = "e56f2e22fc761e82a34aca553f6725e2aff4fe6c"
 
 [[projects]]
   branch = "master"
@@ -267,7 +282,7 @@
   name = "github.com/prometheus/prometheus"
   packages = ["pkg/labels"]
   pruneopts = "UT"
-  revision = "8155cc49924cd48ec552506b4e5519ebafa8b722"
+  revision = "10ec2552af1be4a421b89afd4a1f8eb17948a187"
 
 [[projects]]
   digest = "1:30bef1faf227592dcae9ced04b457efe84298d059b9a8398630d848c0f507e89"
@@ -284,6 +299,14 @@
   pruneopts = "UT"
   revision = "dae0fa8d5b0c810a8ab733fbd5510c7cae84eca4"
   version = "v1.4.0"
+
+[[projects]]
+  digest = "1:972c2427413d41a1e06ca4897e8528e5a1622894050e2f527b38ddf0f343f759"
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  pruneopts = "UT"
+  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:9cd877df0dd71efcb84a7b9ad0eec5de1221775ccb87bba8a9cb1d125be35ecf"
@@ -373,14 +396,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:944736317d4f2fb1c1015ef9ca05fd9313b4e19f1128901cc678f636435fa9b0"
+  digest = "1:ed708ad22c955df62e7eaba9ddd9edd3afc7818a4a72d9680bf797ac6c5ae3a8"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "fead79001313d15903fb4605b4a1b781532cd93e"
+  revision = "a2f829d7f35f2ed1c3520c553a6226495455cae0"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -465,11 +488,13 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/cortexproject/cortex/pkg/util/flagext",
     "github.com/fluent/fluent-bit-go/output",
     "github.com/go-kit/kit/log/logrus",
     "github.com/grafana/loki/pkg/promtail/client",
     "github.com/prometheus/common/model",
     "github.com/sirupsen/logrus",
+    "github.com/stretchr/testify/assert",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
