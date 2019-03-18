@@ -11,7 +11,6 @@ import (
 	"C"
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"time"
 	"unsafe"
@@ -67,27 +66,27 @@ func FLBPluginRegister(ctx unsafe.Pointer) int {
 func FLBPluginInit(ctx unsafe.Pointer) int {
 	// Example to retrieve an optional configuration parameter
 	url := plugin.PluginConfigKey(ctx, "url")
-	if url == "" {
-		url = "http://localhost:3100/api/prom/push"
-	}
-	var clientURL flagext.URLValue
-	err := clientURL.Set(url)
+	batchWait := plugin.PluginConfigKey(ctx, "batchWait")
+	batchSize := plugin.PluginConfigKey(ctx, "batchSize")
+
+	config, err := getLokiConfig(url, batchWait, batchSize)
 	if err != nil {
-		log.Fatalf("Failed to parse client URL")
 		plugin.Unregister(ctx)
 		plugin.Exit(1)
 		return output.FLB_ERROR
 	}
 	fmt.Printf("[flb-go] plugin URL parameter = '%s'\n", url)
+	fmt.Printf("[flb-go] plugin batchWait parameter = '%s'\n", batchSize)
+	fmt.Printf("[flb-go] plugin batchSize parameter = '%s'\n", batchWait)
 
 	cfg := client.Config{}
 	// Init everything with default values.
 	flagext.RegisterFlags(&cfg)
 
 	// Override some of those defaults
-	cfg.URL = clientURL
-	cfg.BatchWait = 10 * time.Millisecond
-	cfg.BatchSize = 10 * 1024
+	cfg.URL = config.url
+	cfg.BatchWait = config.batchWait
+	cfg.BatchSize = config.batchSize
 
 	log := logrus.New()
 
