@@ -119,7 +119,7 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 		// Get timestamp
 		timestamp := ts.(output.FLBTime).Time
 
-		line, err := createJSON(timestamp, record)
+		line, err := createJSON(record)
 		if err != nil {
 			fmt.Errorf("error creating message for Grafana Loki: %v", err)
 			continue
@@ -140,7 +140,7 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 	return output.FLB_OK
 }
 
-func createJSON(timestamp time.Time, record map[interface{}]interface{}) (string, error) {
+func createJSON(record map[interface{}]interface{}) (string, error) {
 	m := make(map[string]interface{})
 
 	for k, v := range record {
