@@ -1,0 +1,23 @@
+version: v0-winbuild-{build}
+
+build: off
+
+clone_folder: c:\gopath\src\github.com\cosmo0920\fluent-bit-go-loki
+
+environment:
+  GOPATH: c:\gopath
+  PATH: C:\msys64\mingw64\bin\;%PATH%
+
+stack: go 1.11
+
+before_test:
+  - go vet ./...
+
+test_script:
+  - go test ./... -v
+  - go build -buildmode=c-shared -o out_loki.dll .
+
+on_success:
+  - 7z a fluent-bit-go-loki.zip out_loki.dll
+  - set ARTIFACT=fluent-bit-go-loki.zip
+  - ps: Push-AppveyorArtifact $Env:ARTIFACT
