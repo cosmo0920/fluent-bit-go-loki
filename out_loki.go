@@ -65,9 +65,9 @@ func FLBPluginRegister(ctx unsafe.Pointer) int {
 // ctx (context) pointer to fluentbit context (state/ c code)
 func FLBPluginInit(ctx unsafe.Pointer) int {
 	// Example to retrieve an optional configuration parameter
-	url := plugin.PluginConfigKey(ctx, "url")
-	batchWait := plugin.PluginConfigKey(ctx, "batchWait")
-	batchSize := plugin.PluginConfigKey(ctx, "batchSize")
+	url := plugin.PluginConfigKey(ctx, "URL")
+	batchWait := plugin.PluginConfigKey(ctx, "BatchWait")
+	batchSize := plugin.PluginConfigKey(ctx, "BatchSize")
 
 	config, err := getLokiConfig(url, batchWait, batchSize)
 	if err != nil {
@@ -117,7 +117,16 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 		}
 
 		// Get timestamp
-		timestamp := ts.(output.FLBTime).Time
+		var timestamp time.Time
+		switch t := ts.(type) {
+		case output.FLBTime:
+			timestamp = ts.(output.FLBTime).Time
+		case uint64:
+			timestamp = time.Unix(int64(t), 0)
+		default:
+			fmt.Print("timestamp isn't known format. Use current time.")
+			timestamp = time.Now()
+		}
 
 		line, err := createJSON(record)
 		if err != nil {
