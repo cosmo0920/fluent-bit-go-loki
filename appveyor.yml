@@ -16,3 +16,8 @@ before_test:
 test_script:
   - go test ./... -v
   - go build -buildmode=c-shared -o out_loki.dll .
+
+on_success:
+  - 7z a fluent-bit-go-loki.zip out_loki.dll
+  - set ARTIFACT=fluent-bit-go-loki.zip
+  - ps: Push-AppveyorArtifact $Env:ARTIFACT
