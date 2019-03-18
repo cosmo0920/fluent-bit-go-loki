@@ -1,0 +1,17 @@
+version: v0-winbuild-{build}
+
+build: off
+
+clone_folder: c:\gopath\src\github.com\cosmo0920\fluent-bit-go-loki
+
+environment:
+  GOPATH: c:\gopath
+  PATH: C:\msys64\mingw64\bin\;%PATH%
+
+stack: go 1.10
+
+before_test:
+  - go vet ./...
+
+test_script:
+  - go test ./...
