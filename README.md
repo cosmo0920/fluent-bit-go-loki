@@ -1,5 +1,7 @@
 # fluent-bit loki output plugin
 
+[![Build Status](https://travis-ci.org/cosmo0920/fluent-bit-go-loki.svg?branch=master)](https://travis-ci.org/cosmo0920/fluent-bit-go-loki)
+
 This plugin works with fluent-bit's go plugin interface. You can use fluent-bit loki to ship logs into grafana datasource with loki.
 
 The configuration typically looks like:
