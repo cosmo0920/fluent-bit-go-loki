@@ -27,9 +27,12 @@ $ make
 
 ### Configuration Options
 
-| Key           | Description                      | Default                             |
-| --------------|----------------------------------|-------------------------------------|
-| Url           | Url of loki server API endpoint  | http://localhost:3100/api/prom/push |
+| Key           | Description                                   | Default                             |
+| --------------|-----------------------------------------------|-------------------------------------|
+| Url           | Url of loki server API endpoint               | http://localhost:3100/api/prom/push |
+| BatchWait     | Waiting time for batch operation (unit: msec) | 10 milliseconds                     |
+| Url           | Batch size for batch operation (unit: KiB)    | 10 KiB                              |
+| Labels        | labels for API requests                       | job="fluent-bit" (describe below)   |
 
 Example:
 
@@ -40,6 +43,10 @@ add this section to fluent-bit.conf
     Name loki
     Match *
     Url http://localhost:3100/api/prom/push
+    BatchWait 10 # (10msec)
+    BatchSize 30 # (30KiB)
+    # interpreted as {test="fluent-bit-go", lang="Golang"}
+    Labels {"labels": [{"key": "test", "label": "fluent-bit-go"},{"key": "lang", "label": "Golang"}]}
 ```
 
 ## Useful links
