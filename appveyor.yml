@@ -14,5 +14,5 @@ before_test:
   - go vet ./...
 
 test_script:
-  - go test ./...
+  - go test ./... -v
   - go build -buildmode=c-shared -o out_loki.dll .
