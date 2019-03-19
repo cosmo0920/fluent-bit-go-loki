@@ -5,25 +5,36 @@ build: off
 clone_folder: c:\gopath\src\github.com\cosmo0920\fluent-bit-go-loki
 
 environment:
-  GOPATH: c:\gopath
-  PATH: C:\msys64\mingw64\bin\;%PATH%
+  matrix:
+    - GOPATH: c:\gopath
+      PATH: C:\msys64\mingw64\bin\;%PATH%
+      PLATFORM: x64
+      GOARCH: amd64
+      GOROOT: c:\go
+    - GOPATH: c:\gopath
+      PATH: C:\msys64\mingw32\bin\;%PATH%
+      PLATFORM: win32
+      GOROOT: c:\go-x86
+      GOARCH: 386
 
 stack: go 1.11
 
 before_test:
+  - set GOARCH=%GOARCH%
+  - set PATH=%GOROOT%\bin;C:\%GOPATH%\bin;%PATH%
   - go vet ./...
 
 test_script:
   - go test ./... -v
   - go build -buildmode=c-shared -o out_loki.dll .
-  - 7z a fluent-bit-go-loki.zip out_loki.dll
-  - set ARTIFACT=fluent-bit-go-loki.zip
+  - 7z a fluent-bit-go-loki-%PLATFORM%.zip out_loki.dll
+  - set ARTIFACT=fluent-bit-go-loki-%PLATFORM%.zip
 
 on_success:
   - ps: Push-AppveyorArtifact $Env:ARTIFACT
 
 artifacts:
-  - path: fluent-bit-go-loki.zip
+  - path: fluent-bit-go-loki-*.zip
     name: binary
 
 deploy:
