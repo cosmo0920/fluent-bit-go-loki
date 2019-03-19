@@ -1,5 +1,16 @@
 language: go
 
+os:
+  - linux
+  - osx
+
+matrix:
+  exclude:
+    - os: osx
+      go: "1.11"
+    - os: osx
+      go: tip
+
 go:
   - "1.11"
   - "1.12"
