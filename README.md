@@ -10,7 +10,7 @@ This plugin works with fluent-bit's go plugin interface. You can use fluent-bit 
 The configuration typically looks like:
 
 ```graphviz
-fluent-bit --> loki --> graphana <-- other grafhana sources
+fluent-bit --> loki --> grafana <-- other grafana sources
 ```
 
 # Usage
