@@ -16,8 +16,23 @@ before_test:
 test_script:
   - go test ./... -v
   - go build -buildmode=c-shared -o out_loki.dll .
-
-on_success:
   - 7z a fluent-bit-go-loki.zip out_loki.dll
   - set ARTIFACT=fluent-bit-go-loki.zip
+
+on_success:
   - ps: Push-AppveyorArtifact $Env:ARTIFACT
+
+artifacts:
+  - path: fluent-bit-go-loki.zip
+    name: binary
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: 7XdoaFISgIXPlmVTNkMMS5cOhQzCQ06N1ksjNsres/dAyMYbT8CTxnV9KgHabwww
+  artifact: binary          # upload zip archive to release assets
+  draft: false
+  prerelease: false
+  force_update: true
+  on:
+    appveyor_repo_tag: true        # deploy on tag push only
