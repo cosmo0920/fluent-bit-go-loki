@@ -10,7 +10,7 @@ Provide example config and message
 
 ...
 
-#### Using Fluentd and ES plugin versions
+#### Using Fluentd and loki plugin versions
 
 * OS version
 * Bare Metal or within Docker or Kubernetes or others?
