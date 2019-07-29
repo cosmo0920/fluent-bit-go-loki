@@ -19,6 +19,20 @@ fluent-bit --> loki --> grafana <-- other grafana sources
 $ fluent-bit -e /path/to/built/out_loki.so -c fluent-bit.conf
 ```
 
+Or,
+
+Edit Url parameter in the [OUTPUT] section in the [configuration](docker/fluent-bit-loki.conf).
+
+```bash
+$ docker build . -t fluent-bit/loki-plugin
+```
+
+and then,
+
+```bash
+$ docker run -it fluent-bit/loki-plugin
+```
+
 # Prerequisites
 
 * Go 1.11+
