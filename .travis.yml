@@ -1,20 +1,29 @@
 language: go
 
-os:
-  - linux
-  - osx
-
 matrix:
-  exclude:
+  include:
     - os: osx
+      go: "1.12"
+      script: make
+    - os: linux
       go: "1.11"
-    - os: osx
+      script: make
+    - os: linux
+      go: "1.12"
+      script: make
+    - os: linux
       go: tip
-
-go:
-  - "1.11"
-  - "1.12"
-  - tip
-
-script:
-  - make
+      script: make
+    - os: linux
+      go: "1.12"
+      services:
+        - docker
+      dist: xenial
+      sudo: true
+      language: c
+      env: DOCKER_BUILD=1
+      script: |
+        echo "===== BUILD DOCKER IMAGE ======="
+        sed -i 's/\[YOURHOST\]/localhost/' docker/fluent-bit-loki.conf
+        sed -i 's/\[YOURPORT\]/3100/' docker/fluent-bit-loki.conf
+        docker build . -t fluent-bit/loki-plugin
