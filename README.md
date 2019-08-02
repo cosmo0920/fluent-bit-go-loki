@@ -30,7 +30,7 @@ $ docker build . -t fluent-bit/loki-plugin
 and then,
 
 ```bash
-$ docker run -it fluent-bit/loki-plugin
+$ docker run -it -e="LOKI_URL=http://[YOURHOST]:[YOURPORT]/api/prom/push"" fluent-bit/loki-plugin
 ```
 
 # Prerequisites

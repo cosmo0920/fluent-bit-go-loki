@@ -24,6 +24,4 @@ matrix:
       env: DOCKER_BUILD=1
       script: |
         echo "===== BUILD DOCKER IMAGE ======="
-        sed -i 's/\[YOURHOST\]/localhost/' docker/fluent-bit-loki.conf
-        sed -i 's/\[YOURPORT\]/3100/' docker/fluent-bit-loki.conf
         docker build . -t fluent-bit/loki-plugin
