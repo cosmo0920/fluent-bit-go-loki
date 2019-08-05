@@ -7,8 +7,8 @@ import (
 	"unsafe"
 
 	"github.com/fluent/fluent-bit-go/output"
-	"github.com/stretchr/testify/assert"
 	"github.com/prometheus/common/model"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateJSON(t *testing.T) {
