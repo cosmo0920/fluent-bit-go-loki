@@ -49,8 +49,8 @@ $ make
 | Key           | Description                                   | Default                             |
 | --------------|-----------------------------------------------|-------------------------------------|
 | Url           | Url of loki server API endpoint               | http://localhost:3100/api/prom/push |
-| BatchWait     | Waiting time for batch operation (unit: msec) | 10 milliseconds                     |
-| Url           | Batch size for batch operation (unit: KiB)    | 10 KiB                              |
+| BatchWait     | Time to wait before send a log batch to Loki, full or not. (unit: sec) | 1 second                     |
+| BatchSize     | Log batch size to send a log batch to Loki (unit: Bytes)    | 10 KiB (10*1024 Bytes)                            |
 | Labels        | labels for API requests                       | job="fluent-bit" (describe below)   |
 
 Example:
