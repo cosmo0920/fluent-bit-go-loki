@@ -33,14 +33,8 @@ func TestGetLokiConfig(t *testing.T) {
 	assert.Equal(t, 15*time.Second, c.batchWait, "Use user-defined value of batchWait")
 	assert.Equal(t, 30*1024, c.batchSize, "Use user-defined value of batchSize")
 
-	// LabelSets
-	labelJSON := `
-{"labels": [
-  {"key": "test", "label": "fluent-bit-go"},
-  {"key": "lang", "label": "Golang"}
-]}
-`
-	c, err = getLokiConfig("", "15", "30", labelJSON, "")
+	labels := `{job="fluent-bit"}`
+	c, err = getLokiConfig("", "15", "30", labels, "")
 	if err != nil {
 		t.Fatalf("failed test %#v", err)
 	}
