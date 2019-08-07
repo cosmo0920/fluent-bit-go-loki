@@ -1,5 +1,11 @@
+ifeq ($(OS),Windows_NT)
+    DLLEXT := .dll
+else
+    DLLEXT := .so
+endif
+
 all: test
-	go build -buildmode=c-shared -o out_loki.so .
+	go build -buildmode=c-shared -o out_loki$(DLLEXT) .
 
 fast:
 	go build out_loki.go
