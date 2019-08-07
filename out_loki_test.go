@@ -62,6 +62,8 @@ func (p *testFluentPlugin) PluginConfigKey(ctx unsafe.Pointer, key string) strin
 		return `
 {"labels": [{"key": "job", "label": "fluent-bit"}]}
 `
+	case "LogLevel":
+		return "info"
 	}
 	return "unknown-" + key
 }
