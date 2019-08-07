@@ -20,13 +20,13 @@ environment:
 stack: go 1.11
 
 before_test:
+  - choco install make
   - set GOARCH=%GOARCH%
   - set PATH=%GOROOT%\bin;C:\%GOPATH%\bin;%PATH%
   - go vet ./...
 
 test_script:
-  - go test ./... -v
-  - go build -buildmode=c-shared -o out_loki.dll .
+  - make
   - 7z a fluent-bit-go-loki-%PLATFORM%.zip out_loki.dll
   - set ARTIFACT=fluent-bit-go-loki-%PLATFORM%.zip
 
