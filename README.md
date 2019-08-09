@@ -52,6 +52,7 @@ $ make
 | BatchWait     | Time to wait before send a log batch to Loki, full or not. (unit: sec) | 1 second                     |
 | BatchSize     | Log batch size to send a log batch to Loki (unit: Bytes)    | 10 KiB (10*1024 Bytes)                            |
 | Labels        | labels for API requests                       | job="fluent-bit" (describe below)   |
+| LogLevel      | Specify log level                             | info                                |
 
 Example:
 
