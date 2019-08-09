@@ -5,7 +5,7 @@ ENV GOARCH=amd64
 ENV GOPATH=/go
 ADD . /go/src/github.com/cosmo0920/fluent-bit-go-loki
 WORKDIR /go/src/github.com/cosmo0920/fluent-bit-go-loki
-RUN go build -buildmode=c-shared -o out_loki.so .
+RUN make build
 
 FROM fluent/fluent-bit:1.2
 MAINTAINER Hiroshi Hatake <cosmo0920.wp[at]gmail.com>
