@@ -6,16 +6,16 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/fluent/fluent-bit-go/output"
-	"github.com/grafana/loki/pkg/promtail/client"
-	"github.com/sirupsen/logrus"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	kit "github.com/go-kit/kit/log/logrus"
+	"github.com/grafana/loki/pkg/promtail/client"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/common/version"
-	"github.com/cortexproject/cortex/pkg/util/flagext"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/sirupsen/logrus"
 )
 
 var loki client.Client
