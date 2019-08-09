@@ -76,6 +76,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 
 	config, err := getLokiConfig(url, batchWait, batchSize, labels, logLevel)
 	if err != nil {
+		level.Error(logger).Log("[flb-go]", "error", err)
 		plugin.Unregister(ctx)
 		plugin.Exit(1)
 		return output.FLB_ERROR
