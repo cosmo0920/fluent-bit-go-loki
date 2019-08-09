@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -10,6 +9,7 @@ import (
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
+	"github.com/grafana/loki/pkg/logql"
 	"github.com/prometheus/common/model"
 	"github.com/weaveworks/common/logging"
 )
@@ -20,13 +20,6 @@ type lokiConfig struct {
 	batchSize int
 	labelSet  model.LabelSet
 	logLevel  logging.Level
-}
-
-type labelSetJSON struct {
-	Labels []struct {
-		Key   string `json:"key"`
-		Label string `json:"label"`
-	} `json:"labels"`
 }
 
 func getLokiConfig(url string, batchWait string, batchSize string, labels string, logLevelVal string) (*lokiConfig, error) {
@@ -53,20 +46,18 @@ func getLokiConfig(url string, batchWait string, batchSize string, labels string
 	}
 	lc.batchSize = batchSizeValue
 
-	var labelValues labelSetJSON
 	if labels == "" {
-		labels = `
-{"labels": [{"key": "job", "label": "fluent-bit"}]}
-`
+		labels = `{job="fluent-bit"}`
 	}
 
-	err = json.Unmarshal(([]byte)(labels), &labelValues)
+	ls, err := logql.ParseExpr(labels)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse Labels")
+		return nil, err
 	}
+	matchers := ls.Matchers()
 	labelSet := make(model.LabelSet)
-	for _, v := range labelValues.Labels {
-		labelSet[model.LabelName(v.Key)] = model.LabelValue(v.Label)
+	for _, m := range matchers {
+		labelSet[model.LabelName(m.Name)] = model.LabelValue(m.Value)
 	}
 	lc.labelSet = labelSet
 

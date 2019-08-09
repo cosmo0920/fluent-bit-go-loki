@@ -30,6 +30,11 @@
   name = "github.com/cortexproject/cortex"
 
 [[constraint]]
+  name = "github.com/weaveworks/common"
+  source = "https://github.com/tomwilkie/weaveworks-common"
+  branch = "server-listen-addr"
+
+[[constraint]]
   branch = "master"
   name = "github.com/fluent/fluent-bit-go"
 

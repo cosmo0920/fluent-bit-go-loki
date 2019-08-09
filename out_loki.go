@@ -17,7 +17,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var loki *client.Client
+var loki client.Client
 var ls model.LabelSet
 var plugin GoOutputPlugin = &fluentPlugin{}
 var logger log.Logger
