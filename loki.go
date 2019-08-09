@@ -83,7 +83,7 @@ func newLogger(logLevel logging.Level) log.Logger {
 
 func defaultLogger() log.Logger {
 	var logLevel logging.Level
-	logLevel.Set("info")
+	_ = logLevel.Set("info")
 	logger := log.NewLogfmtLogger(log.NewSyncWriter(os.Stdout))
 	logger = level.NewFilter(logger, logLevel.Gokit)
 	logger = log.With(logger, "caller", log.Caller(3))
