@@ -6,8 +6,11 @@ else
     TEST_OPTS := -cover -race -coverprofile=coverage.txt -covermode=atomic
 endif
 
+VERSION := 0.2.0
+GO_FLAGS := -ldflags "-X main.Version=${VERSION}"
+
 all: test
-	go build -buildmode=c-shared -o out_loki$(DLLEXT) .
+	go build $(GO_FLAGS) -buildmode=c-shared -o out_loki$(DLLEXT) .
 
 fast:
 	go build out_loki.go
