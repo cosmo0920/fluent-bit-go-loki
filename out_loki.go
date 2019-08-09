@@ -13,6 +13,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	kit "github.com/go-kit/kit/log/logrus"
 	"github.com/prometheus/common/model"
+	"github.com/prometheus/common/version"
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -80,7 +81,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 		return output.FLB_ERROR
 	}
 	logger = newLogger(config.logLevel)
-	level.Info(logger).Log("[flb-go]", "Starting fluent-bit-go-loki", "version", Version)
+	level.Info(logger).Log("[flb-go]", "Starting fluent-bit-go-loki", "version", version.Info())
 	level.Info(logger).Log("[flb-go]", "provided parameter", "URL", url)
 	level.Info(logger).Log("[flb-go]", "provided parameter", "BatchWait", batchWait)
 	level.Info(logger).Log("[flb-go]", "provided parameter", "BatchSize", batchSize)
