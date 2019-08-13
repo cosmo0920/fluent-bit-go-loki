@@ -35,6 +35,14 @@ and then,
 $ docker run -it -e="LOKI_URL=http://[YOURHOST]:[YOURPORT]/api/prom/push" fluent-bit/loki-plugin
 ```
 
+Using docker image from docker hub.
+
+```bash
+$ docker pull cosmo0920/fluent-bit-go-loki:latest
+```
+
+Other released images are available in [DockerHub's fluent-bit-go-loki image tags](https://cloud.docker.com/repository/docker/cosmo0920/fluent-bit-go-loki/tags).
+
 # Prerequisites
 
 * Go 1.11+
