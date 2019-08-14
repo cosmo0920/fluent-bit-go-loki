@@ -47,6 +47,7 @@ Other released images are available in [DockerHub's fluent-bit-go-loki image tag
 
 * Go 1.11+
 * gcc (for cgo)
+* make (for Makefile)
 
 ## Building
 
