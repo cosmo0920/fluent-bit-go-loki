@@ -41,7 +41,7 @@ Using docker image from docker hub.
 $ docker pull cosmo0920/fluent-bit-go-loki:latest
 ```
 
-Other released images are available in [DockerHub's fluent-bit-go-loki image tags](https://cloud.docker.com/repository/docker/cosmo0920/fluent-bit-go-loki/tags).
+Other released images are available in [DockerHub's fluent-bit-go-loki image tags](https://hub.docker.com/r/cosmo0920/fluent-bit-go-loki/tags).
 
 # Prerequisites
 
