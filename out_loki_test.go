@@ -32,6 +32,33 @@ func TestCreateJSON(t *testing.T) {
 	assert.Equal(t, result["number"], float64(8))
 }
 
+func TestCreateJSONWithRemoveKeys(t *testing.T) {
+	record := make(map[interface{}]interface{})
+	record["key"] = "value"
+	record["number"] = 8
+	record["k8s"] = "removed"
+	record["Golang"] = "vanished"
+
+	removeKeys = []string{"k8s", "Golang"}
+
+	line, err := createJSON(record)
+	if err != nil {
+		assert.Fail(t, "createJSON fails:%v", err)
+	}
+	assert.NotNil(t, line, "json string not to be nil")
+	result := make(map[string]interface{})
+	jsonBytes := ([]byte)(line)
+	err = json.Unmarshal(jsonBytes, &result)
+	if err != nil {
+		assert.Fail(t, "unmarshal of json fails:%v", err)
+	}
+
+	assert.Equal(t, result["key"], "value")
+	assert.Equal(t, result["number"], float64(8))
+	assert.Nil(t, result["k8s"])
+	assert.Nil(t, result["Golang"])
+}
+
 type testrecord struct {
 	rc   int
 	ts   interface{}
@@ -62,6 +89,8 @@ func (p *testFluentPlugin) PluginConfigKey(ctx unsafe.Pointer, key string) strin
 		return `{job="fluent-bit"}`
 	case "LogLevel":
 		return "info"
+	case "RemoveKeys":
+		return "k8s, pod_name,namespace"
 	}
 	return "unknown-" + key
 }
