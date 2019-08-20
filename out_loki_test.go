@@ -68,6 +68,7 @@ func TestCreateLokiStreamWithLabelKeys(t *testing.T) {
 	record["k8s"] = "stable"
 	record["daemonset"] = "cluster"
 	labelSet := make(model.LabelSet)
+	removeKeys = []string{}
 	labelKeys = []string{"k8s", "daemonset"}
 
 	line, labels, err := createLokiStream(labelSet, record)

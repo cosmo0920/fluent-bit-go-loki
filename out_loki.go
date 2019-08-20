@@ -2,6 +2,7 @@ package main
 
 import (
 	"C"
+	"fmt"
 	"os"
 	"time"
 	"unsafe"
@@ -184,9 +185,9 @@ func createLokiStream(labelSet model.LabelSet, record map[interface{}]interface{
 	}
 
 	for _, l := range labelKeys {
-		if record[l] != nil {
-			labelSet[model.LabelName(l)] = model.LabelValue(record[l].(string))
-			delete(record, l)
+		if m[l] != nil {
+			labelSet[model.LabelName(l)] = model.LabelValue(fmt.Sprint(m[l]))
+			delete(m, l)
 		}
 	}
 
