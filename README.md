@@ -60,10 +60,11 @@ $ make
 | Key           | Description                                   | Default                             |
 | --------------|-----------------------------------------------|-------------------------------------|
 | Url           | Url of loki server API endpoint               | http://localhost:3100/api/prom/push |
-| BatchWait     | Time to wait before send a log batch to Loki, full or not. (unit: sec) | 1 second                     |
-| BatchSize     | Log batch size to send a log batch to Loki (unit: Bytes)    | 10 KiB (10*1024 Bytes)                            |
+| BatchWait     | Time to wait before send a log batch to Loki, full or not. (unit: sec) | 1 second   |
+| BatchSize     | Log batch size to send a log batch to Loki (unit: Bytes)    | 10 KiB (10*1024 Bytes)|
 | Labels        | labels for API requests                       | job="fluent-bit" (describe below)   |
 | LogLevel      | Specify log level                             | info                                |
+| RemoveKeys    | Specify removing keys                         | none                                |
 
 Example:
 
@@ -77,6 +78,7 @@ add this section to fluent-bit.conf
     BatchWait 10 # (10msec)
     BatchSize 30 # (30KiB)
     Labels {test="fluent-bit-go",lang="Golang"}
+    RemoveKeys key1,key2
 ```
 
 ## Useful links
