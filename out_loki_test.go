@@ -151,6 +151,19 @@ func TestPluginFlusher(t *testing.T) {
 	}
 }
 
+func TestPluginFlusherFailure(t *testing.T) {
+	testplugin := &testFluentPlugin{url: "http://localhost:3100/api/prom/push"}
+	ts := time.Date(2019, time.March, 10, 10, 11, 12, 0, time.UTC)
+	testrecords := map[interface{}]interface{}{
+		"mykey": "myvalue",
+	}
+	testplugin.addrecord(1, output.FLBTime{Time: ts}, testrecords)
+	plugin = testplugin
+	res := FLBPluginFlush(nil, 0, nil)
+	assert.Equal(t, output.FLB_OK, res)
+	assert.Len(t, testplugin.events, 0)
+}
+
 func TestPluginFlusherWithRemoveKeys(t *testing.T) {
 	testplugin := &testFluentPlugin{url: "http://localhost:3100/api/prom/push"}
 	ts := time.Date(2019, time.March, 10, 10, 11, 12, 0, time.UTC)
