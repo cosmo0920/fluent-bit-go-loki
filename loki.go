@@ -16,11 +16,11 @@ import (
 )
 
 type lokiConfig struct {
-	url       flagext.URLValue
-	batchWait time.Duration
-	batchSize int
-	labelSet  model.LabelSet
-	logLevel  logging.Level
+	url        flagext.URLValue
+	batchWait  time.Duration
+	batchSize  int
+	labelSet   model.LabelSet
+	logLevel   logging.Level
 	removeKeys []string
 }
 

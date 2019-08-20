@@ -156,7 +156,7 @@ func TestPluginFlusherWithRemoveKeys(t *testing.T) {
 	ts := time.Date(2019, time.March, 10, 10, 11, 12, 0, time.UTC)
 	testrecords := map[interface{}]interface{}{
 		"mykey": "myvalue",
-		"k8s":"vanished",
+		"k8s":   "vanished",
 	}
 	removeKeys = []string{"k8s", "Golang"}
 
