@@ -150,3 +150,36 @@ func TestPluginFlusher(t *testing.T) {
 		assert.Fail(t, "unmarshal of json fails:%v", err)
 	}
 }
+
+func TestPluginFlusherWithRemoveKeys(t *testing.T) {
+	testplugin := &testFluentPlugin{url: "http://localhost:3100/api/prom/push"}
+	ts := time.Date(2019, time.March, 10, 10, 11, 12, 0, time.UTC)
+	testrecords := map[interface{}]interface{}{
+		"mykey": "myvalue",
+		"k8s":"vanished",
+	}
+	removeKeys = []string{"k8s", "Golang"}
+
+	testplugin.addrecord(0, output.FLBTime{Time: ts}, testrecords)
+	testplugin.addrecord(0, uint64(ts.Unix()), testrecords)
+	testplugin.addrecord(0, 0, testrecords)
+	plugin = testplugin
+	res := FLBPluginFlush(nil, 0, nil)
+	assert.Equal(t, output.FLB_OK, res)
+	assert.Len(t, testplugin.events, len(testplugin.records))
+	var parsed map[string]interface{}
+	err := json.Unmarshal(testplugin.events[0].data, &parsed)
+	if err != nil {
+		assert.Fail(t, "unmarshal of json fails:%v", err)
+	}
+	assert.Equal(t, testrecords["mykey"], parsed["mykey"])
+	assert.Nil(t, parsed["k8s"])
+	err = json.Unmarshal(testplugin.events[1].data, &parsed)
+	if err != nil {
+		assert.Fail(t, "unmarshal of json fails:%v", err)
+	}
+	err = json.Unmarshal(testplugin.events[2].data, &parsed)
+	if err != nil {
+		assert.Fail(t, "unmarshal of json fails:%v", err)
+	}
+}
