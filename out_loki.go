@@ -20,6 +20,7 @@ import (
 var loki client.Client
 var ls model.LabelSet
 var removeKeys []string
+var labelKeys []string
 var plugin GoOutputPlugin = &fluentPlugin{}
 var logger = defaultLogger()
 
@@ -74,8 +75,9 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	labels := plugin.PluginConfigKey(ctx, "Labels")
 	logLevel := plugin.PluginConfigKey(ctx, "LogLevel")
 	removeKeyStr := plugin.PluginConfigKey(ctx, "RemoveKeys")
+	labelKeyStr := plugin.PluginConfigKey(ctx, "LabelKeys")
 
-	config, err := getLokiConfig(url, batchWait, batchSize, labels, logLevel, removeKeyStr)
+	config, err := getLokiConfig(url, batchWait, batchSize, labels, logLevel, removeKeyStr, labelKeyStr)
 	if err != nil {
 		level.Error(logger).Log("[flb-go]", "failed to launch", "error", err)
 		plugin.Unregister(ctx)
@@ -90,6 +92,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	level.Info(logger).Log("[flb-go]", "provided parameter", "Labels", labels)
 	level.Info(logger).Log("[flb-go]", "provided parameter", "LogLevel", logLevel)
 	level.Info(logger).Log("[flb-go]", "provided parameter", "RemoveKeys", removeKeyStr)
+	level.Info(logger).Log("[flb-go]", "provided parameter", "LabelKeys", labelKeyStr)
 
 	cfg := client.Config{}
 	// Init everything with default values.
@@ -111,6 +114,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	}
 	ls = config.labelSet
 	removeKeys = config.removeKeys
+	labelKeys = config.labelKeys
 
 	return output.FLB_OK
 }
@@ -141,13 +145,13 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 			timestamp = time.Now()
 		}
 
-		line, err := createJSON(record)
+		line, labels, err := createLokiStream(ls, record)
 		if err != nil {
 			level.Error(logger).Log("msg", "error creating message for Grafana Loki", "error", err)
 			continue
 		}
 
-		err = plugin.HandleLine(ls, timestamp, line)
+		err = plugin.HandleLine(labels, timestamp, line)
 		if err != nil {
 			level.Error(logger).Log("msg", "error sending message for Grafana Loki", "error", err)
 			return output.FLB_ERROR
@@ -162,7 +166,7 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 	return output.FLB_OK
 }
 
-func createJSON(record map[interface{}]interface{}) (string, error) {
+func createLokiStream(labelSet model.LabelSet, record map[interface{}]interface{}) (string, model.LabelSet, error) {
 	m := make(map[string]interface{})
 
 	for k, v := range record {
@@ -179,12 +183,19 @@ func createJSON(record map[interface{}]interface{}) (string, error) {
 		delete(m, k)
 	}
 
-	js, err := jsoniter.Marshal(m)
-	if err != nil {
-		return "{}", err
+	for _, l := range labelKeys {
+		if record[l] != nil {
+			labelSet[model.LabelName(l)] = model.LabelValue(record[l].(string))
+			delete(record, l)
+		}
 	}
 
-	return string(js), nil
+	js, err := jsoniter.Marshal(m)
+	if err != nil {
+		return "{}", nil, err
+	}
+
+	return string(js), labelSet, nil
 }
 
 //export FLBPluginExit

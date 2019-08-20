@@ -22,9 +22,10 @@ type lokiConfig struct {
 	labelSet   model.LabelSet
 	logLevel   logging.Level
 	removeKeys []string
+	labelKeys  []string
 }
 
-func getLokiConfig(url, batchWait, batchSize, labels, logLevelVal, removeKeyStr string) (*lokiConfig, error) {
+func getLokiConfig(url, batchWait, batchSize, labels, logLevelVal, removeKeyStr, labelKeyStr string) (*lokiConfig, error) {
 	lc := &lokiConfig{}
 	var clientURL flagext.URLValue
 	if url == "" {
@@ -75,6 +76,13 @@ func getLokiConfig(url, batchWait, batchSize, labels, logLevelVal, removeKeyStr 
 	if removeKeyStr != "" {
 		regex := regexp.MustCompile(`\s*,\s*`)
 		lc.removeKeys = regex.Split(removeKeyStr, -1)
+	}
+
+	if labelKeyStr != "" {
+		regex := regexp.MustCompile(`\s*,\s*`)
+		lc.labelKeys = regex.Split(labelKeyStr, -1)
+	} else {
+		lc.labelKeys = []string{"job", "instance"}
 	}
 
 	return lc, nil
