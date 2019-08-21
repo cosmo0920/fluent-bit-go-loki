@@ -64,7 +64,8 @@ $ make
 | BatchSize     | Log batch size to send a log batch to Loki (unit: Bytes)    | 10 KiB (10*1024 Bytes)|
 | Labels        | labels for API requests                       | job="fluent-bit" (describe below)   |
 | LogLevel      | Specify log level                             | info                                |
-| RemoveKeys    | Specify removing keys                         | none                                |
+| RemoveKeys    | Comma separated list of needless record keys to remove. | none                      |
+| LabelKeys     | Comma separated list of keys to use as stream labels.   | none                      |
 
 Example:
 

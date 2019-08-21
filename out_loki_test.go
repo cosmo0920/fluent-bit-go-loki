@@ -11,12 +11,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateJSON(t *testing.T) {
+func TestCreateLokiStream(t *testing.T) {
 	record := make(map[interface{}]interface{})
 	record["key"] = "value"
 	record["number"] = 8
+	labelSet := make(model.LabelSet)
 
-	line, err := createJSON(record)
+	line, _, err := createLokiStream(labelSet, record)
 	if err != nil {
 		assert.Fail(t, "createJSON fails:%v", err)
 	}
@@ -32,16 +33,17 @@ func TestCreateJSON(t *testing.T) {
 	assert.Equal(t, result["number"], float64(8))
 }
 
-func TestCreateJSONWithRemoveKeys(t *testing.T) {
+func TestCreateLokiStreamWithRemoveKeys(t *testing.T) {
 	record := make(map[interface{}]interface{})
 	record["key"] = "value"
 	record["number"] = 8
 	record["k8s"] = "removed"
 	record["Golang"] = "vanished"
+	labelSet := make(model.LabelSet)
 
 	removeKeys = []string{"k8s", "Golang"}
 
-	line, err := createJSON(record)
+	line, _, err := createLokiStream(labelSet, record)
 	if err != nil {
 		assert.Fail(t, "createJSON fails:%v", err)
 	}
@@ -57,6 +59,33 @@ func TestCreateJSONWithRemoveKeys(t *testing.T) {
 	assert.Equal(t, result["number"], float64(8))
 	assert.Nil(t, result["k8s"])
 	assert.Nil(t, result["Golang"])
+}
+
+func TestCreateLokiStreamWithLabelKeys(t *testing.T) {
+	record := make(map[interface{}]interface{})
+	record["key"] = "value"
+	record["number"] = 8
+	record["k8s"] = "stable"
+	record["daemonset"] = "cluster"
+	labelSet := make(model.LabelSet)
+	removeKeys = []string{}
+	labelKeys = []string{"k8s", "daemonset"}
+
+	line, labels, err := createLokiStream(labelSet, record)
+	if err != nil {
+		assert.Fail(t, "createJSON fails:%v", err)
+	}
+	assert.Equal(t, `{daemonset="cluster", k8s="stable"}`, labels.String())
+	assert.NotNil(t, line, "json string not to be nil")
+	result := make(map[string]interface{})
+	jsonBytes := ([]byte)(line)
+	err = json.Unmarshal(jsonBytes, &result)
+	if err != nil {
+		assert.Fail(t, "unmarshal of json fails:%v", err)
+	}
+
+	assert.Equal(t, result["key"], "value")
+	assert.Equal(t, result["number"], float64(8))
 }
 
 type testrecord struct {
@@ -91,6 +120,8 @@ func (p *testFluentPlugin) PluginConfigKey(ctx unsafe.Pointer, key string) strin
 		return "info"
 	case "RemoveKeys":
 		return "k8s, pod_name,namespace"
+	case "LabelKeys":
+		return "job,instance"
 	}
 	return "unknown-" + key
 }
