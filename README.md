@@ -12,7 +12,7 @@ This plugin works with fluent-bit's go plugin interface. You can use fluent-bit 
 The configuration typically looks like:
 
 ```graphviz
-fluent-bit --> loki --> grafana <-- other grafana sources
+fluent-bit → loki → grafana ← other grafana sources
 ```
 
 # Usage
@@ -23,13 +23,12 @@ $ fluent-bit -e /path/to/built/out_loki.so -c fluent-bit.conf
 
 Or,
 
-Edit Url parameter in the [OUTPUT] section in the [configuration](docker/fluent-bit-loki.conf).
 
 ```bash
 $ docker build . -t fluent-bit/loki-plugin
 ```
 
-and then,
+and then, specify Url parameter as environment variable:
 
 ```bash
 $ docker run -it -e="LOKI_URL=http://[YOURHOST]:[YOURPORT]/api/prom/push" fluent-bit/loki-plugin
