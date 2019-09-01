@@ -5,7 +5,7 @@
 
 Windows binaries are available in [release pages](https://github.com/cosmo0920/fluent-bit-go-loki/releases).
 
-DockerHub base images is available in [DockerHub](https://cloud.docker.com/repository/docker/cosmo0920/fluent-bit-go-loki).
+DockerHub base images is available in [DockerHub](https://hub.docker.com/r/cosmo0920/fluent-bit-go-loki).
 
 This plugin works with fluent-bit's go plugin interface. You can use fluent-bit loki to ship logs into grafana datasource with loki.
 
