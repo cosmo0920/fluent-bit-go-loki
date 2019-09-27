@@ -1,5 +1,8 @@
 # fluent-bit loki output plugin
 
+**NOTICE!**
+**fluent-bit-go-loki is now merged in [loki repository](https://github.com/grafana/loki).**
+
 [![Build Status](https://travis-ci.org/cosmo0920/fluent-bit-go-loki.svg?branch=master)](https://travis-ci.org/cosmo0920/fluent-bit-go-loki)
 [![Build status](https://ci.appveyor.com/api/projects/status/6s9itaxvrkos11sx/branch/master?svg=true)](https://ci.appveyor.com/project/cosmo0920/fluent-bit-go-loki/branch/master)
 
