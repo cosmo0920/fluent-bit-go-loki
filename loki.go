@@ -29,7 +29,7 @@ func getLokiConfig(url, batchWait, batchSize, labels, logLevelVal, removeKeyStr,
 	lc := &lokiConfig{}
 	var clientURL flagext.URLValue
 	if url == "" {
-		url = "http://localhost:3100/api/prom/push"
+		url = "http://localhost:3100/loki/api/v1/push"
 	}
 	err := clientURL.Set(url)
 	if err != nil {

@@ -13,7 +13,7 @@ func TestGetLokiConfig(t *testing.T) {
 		t.Fatalf("failed test %#v", err)
 	}
 
-	assert.Equal(t, "http://localhost:3100/api/prom/push", c.url.String(), "Use default value of URL")
+	assert.Equal(t, "http://localhost:3100/loki/api/v1/push", c.url.String(), "Use default value of URL")
 	assert.Equal(t, 1*time.Second, c.batchWait, "Use default value of batchWait")
 	assert.Equal(t, 100*1024, c.batchSize, "Use default value of batchSize")
 	assert.Equal(t, "info", c.logLevel.String(), "Use default value of logLevel")
