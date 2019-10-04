@@ -34,7 +34,7 @@ $ docker build . -t fluent-bit/loki-plugin
 and then, specify Url parameter as environment variable:
 
 ```bash
-$ docker run -it -e="LOKI_URL=http://[YOURHOST]:[YOURPORT]/api/prom/push" fluent-bit/loki-plugin
+$ docker run -it -e="LOKI_URL=http://[YOURHOST]:[YOURPORT]/loki/api/v1/push" fluent-bit/loki-plugin
 ```
 
 Using docker image from docker hub.
@@ -77,7 +77,7 @@ add this section to fluent-bit.conf
 [Output]
     Name loki
     Match *
-    Url http://localhost:3100/api/prom/push
+    Url http://localhost:3100/loki/api/v1/push
     BatchWait 10 # (10msec)
     BatchSize 30 # (30KiB)
     Labels {test="fluent-bit-go",lang="Golang"}
